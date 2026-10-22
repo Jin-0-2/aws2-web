@@ -109,5 +109,3 @@ document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLayer();});
 try{S.user=JSON.parse(sessionStorage.getItem('user'));}catch(e){}
 S.route={name:S.user?(S.user.role==='vet'?'vlist':'search'):'login'};
 refresh();
-// 화면 왼쪽 아래: 이 화면을 준 웹 서버 인스턴스 이름 · 사설 IP (instance.json은 서버에서 scripts/instance-info.sh로 생성, 없으면 표시 안 함)
-fetch('instance.json',{cache:'no-store'}).then(r=>r.ok?r.json():null).then(i=>{if(i)$('#inst').textContent=`${i.name} · ${i.ip}`;}).catch(()=>{});
