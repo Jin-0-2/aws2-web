@@ -122,6 +122,8 @@ table{width:100%;border-collapse:collapse;table-layout:fixed}
 .md .ft{padding:12px 20px;border-top:1px solid var(--ln);display:flex;justify-content:flex-end;gap:6px}
 .fg{display:grid;grid-template-columns:96px 1fr;row-gap:12px;align-items:center}
 .fg>.lb{font-weight:500;color:var(--tx2)}
+#inst{position:fixed;left:12px;bottom:12px;z-index:4;padding:3px 8px;border:1px solid var(--ln);border-radius:4px;background:#fff;color:var(--tx3);font-size:11px;pointer-events:none} /* 인스턴스 이름 · 사설 IP */
+#inst:empty{display:none}
 .toast{position:fixed;left:50%;bottom:32px;transform:translateX(-50%);background:#1F2329;color:#fff;padding:11px 18px;border-radius:6px;font-size:13px;z-index:30;box-shadow:0 8px 24px rgba(0,0,0,.2)}
 
 
