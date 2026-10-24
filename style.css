@@ -1,7 +1,4 @@
-@font-face{font-family:P;src:url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Regular.woff2);font-weight:400}
-@font-face{font-family:P;src:url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Medium.woff2);font-weight:500}
-@font-face{font-family:P;src:url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-SemiBold.woff2);font-weight:600}
-@font-face{font-family:P;src:url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/static/woff2/Pretendard-Bold.woff2);font-weight:700}
+@import url(https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/packages/pretendard/dist/web/static/pretendard-dynamic-subset.min.css);   /* Pretendard: 화면에 쓰인 글자만 받아옴 */
 :root{
   --ac:#0E7C66; --ac-h:#0A5E4D; --ac-bg:#E8F5F1;
   --tx:#1A1D23; --tx2:#4A505C; --tx3:#868C98; --tx4:#B0B5BF;
@@ -10,7 +7,7 @@
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html,body{height:100%}
-body{font-family:P,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--tx);background:#fff;font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum"}
+body{font-family:Pretendard,"Apple SD Gothic Neo","Malgun Gothic",sans-serif;color:var(--tx);background:#fff;font-size:13px;line-height:1.45;-webkit-font-smoothing:antialiased;font-feature-settings:"tnum"}
 button,input,select,textarea{font-family:inherit;font-size:inherit;color:inherit}
 a{color:inherit;text-decoration:none;cursor:pointer}
 #app{min-height:100%;display:flex;flex-direction:column;min-width:1100px}
