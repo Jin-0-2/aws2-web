@@ -7,6 +7,6 @@ async function api(method,path,body){
 }
 // WAS 응답 ↔ 화면용 데이터
 const uiPet=p=>({id:p.pid,name:p.pname,type:p.type,breed:p.breed||'',gender:p.gender||'',age:p.age??'',weight:p.weight??'',notes:p.notes||''});
-const uiOwner=o=>({id:o.oid,name:o.oname,phone:o.pnum,addr:o.address||'',pets:o.pets.map(uiPet)});
+const uiOwner=o=>({id:o.oid,name:o.oname,phone:o.pnum,addr:o.address||'',pets:o.pets.map(uiPet),active:o.active_pids});
 const uiConsult=c=>({id:c.cid,petId:c.pid,petName:c.pname,vet:c.vet_name,date:c.date,purpose:c.purpose,diagnosis:c.diagnosis||'',state:c.status});
 const apiPet=p=>({pname:p.name,type:p.type,breed:p.breed||null,gender:p.gender||null,age:p.age===''?null:Number(p.age),weight:p.weight===''?null:p.weight,notes:p.notes||null});

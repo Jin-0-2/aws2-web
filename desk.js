@@ -2,7 +2,7 @@
 function vSearch(){
   const q=S.q.trim(),rows=S.d.rows||[],o=S.d.owner;
   const hl=n=>q?esc(n).replace(esc(q),`<b style="color:var(--ac)">${esc(q)}</b>`):esc(n);
-  // 좌측: 보호자 목록 (전체, 조회하면 이름으로 필터링) / 선택하면 페이지 이동 없이 우측에 채워짐
+  // 좌측: 보호자 목록 (최근 등록 20명, 조회하면 이름으로 필터링) / 선택하면 페이지 이동 없이 우측에 채워짐
   const list=`<div class="sec"><h2>보호자<em>${rows.length}</em></h2></div>
     <table class="tbl"><colgroup><col style="width:80px"><col style="width:120px"><col></colgroup>
     <thead><tr><th>보호자명</th><th>휴대폰</th><th>반려동물</th></tr></thead><tbody>
@@ -16,7 +16,7 @@ function vSearch(){
     <input class="in" id="q" style="width:480px;height:38px" placeholder="보호자 이름" value="${esc(S.q)}" autofocus>
     <button class="btn p l">조회</button></form><div class="split"><div>${list}</div><div>${detail}</div></div></div>`;
 }
-function selOwner(id){S.sel=id;S.edit=null;S.addPet=null;S.errs={};S.flash='';refresh();}
+function selOwner(id){S.sel=id;S.edit=null;S.addPet=null;S.errs={};S.flash='';refresh(true);}
 
 /* ===================== DESK: REGISTER ===================== */
 const blankPet=()=>({name:'',type:'개',breed:'',gender:'',age:'',weight:'',notes:''});
