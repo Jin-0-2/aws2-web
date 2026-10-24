@@ -36,10 +36,25 @@ async function refresh(keep){   // keep: 검색 목록은 다시 받지 않음 (
   try{const d={};if(S.user&&LOAD[S.route.name])await LOAD[S.route.name](S.route,d,keep);S.d=d;render();return true;}
   catch(e){if(!S.user){S.route={name:'login'};render();return true;}toast(e.message);return false;}
 }
-async function go(name,params={}){
+// 화면 ↔ 주소 해시 (#/owner/3, #/pet/5/3) → 뒤로가기·앞으로가기, 새로고침해도 같은 화면
+const HOME=u=>u.role==='vet'?'vlist':'search';
+const ROLE_VIEWS={desk:['search','register','owner','pet'],vet:['vlist','consult']};
+const toHash=r=>'#/'+[r.name,r.id,r.oid].filter(x=>x!=null).join('/');
+function fromHash(){
+  const [name,id,oid]=location.hash.replace(/^#\/?/,'').split('/');
+  if(!S.user)return {name:'login'};
+  if(!(ROLE_VIEWS[S.user.role]||[]).includes(name))return {name:HOME(S.user)};
+  if(name==='owner')return id?{name,id:+id}:{name:HOME(S.user)};
+  if(name==='pet')return id&&oid?{name,id:+id,oid:+oid}:{name:HOME(S.user)};
+  return {name};
+}
+// nav: push(새 기록 추가) / replace(현재 기록 교체) / pop(뒤로·앞으로가기로 이동)
+async function go(name,params={},nav='push'){
   const prev=S.route;S.route={name,...params};S.edit=null;S.addPet=null;S.errs={};if(name!=='owner')S.flash='';
-  if(!await refresh())S.route=prev;
+  const ok=await refresh();if(!ok)S.route=prev;
+  const h=toHash(S.route);if(location.hash!==h)history[nav==='push'?'pushState':'replaceState'](null,'',h);
   window.scrollTo(0,0);
+  return ok;
 }
 function toast(msg){document.querySelectorAll('.toast').forEach(x=>x.remove());const t=document.createElement('div');t.className='toast';t.textContent=msg;document.body.appendChild(t);setTimeout(()=>t.remove(),2400);}
 function closeLayer(){$('#layer').innerHTML='';if(S.visitPid){S.visitPid=null;render();}}
@@ -85,9 +100,9 @@ async function login(){
   let u;
   try{u=await api('POST','/login',{login_id:id,password:pw});}
   catch(e){$('#lerr').textContent='아이디 또는 비밀번호가 올바르지 않습니다.';return;}
-  setUser(u);S.q='';S.sel=null;S.vets=null;go(u.role==='vet'?'vlist':'search');
+  setUser(u);S.q='';S.sel=null;S.vets=null;go(HOME(u),{},'replace');   // 로그인 화면은 기록에 남기지 않음
 }
-async function logout(){try{await api('DELETE','/login');}catch(e){}setUser(null);S.vets=null;go('login');}
+async function logout(){try{await api('DELETE','/login');}catch(e){}setUser(null);S.vets=null;go('login',{},'replace');}
 
 // 5초마다 다시 조회 → 수의사 진료 목록(새 접수), 데스크 보호자·반려동물 상세(진료 상태·방문 등록 버튼)
 // 수정 중이거나 방문 등록 창이 열려 있으면 입력이 지워지지 않게 건너뜀
@@ -106,5 +121,8 @@ function render(){
 }
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeLayer();});
 try{S.user=JSON.parse(sessionStorage.getItem('user'));}catch(e){}
-S.route={name:S.user?(S.user.role==='vet'?'vlist':'search'):'login'};
-refresh();
+// 뒤로가기·앞으로가기: 주소의 화면으로 이동 (방문 등록 창은 닫음)
+window.addEventListener('popstate',()=>{$('#layer').innerHTML='';S.visitPid=null;const r=fromHash();go(r.name,r,'pop');});
+// 시작: 주소의 화면을 열고, 열 수 없으면(없는 보호자 등) 첫 화면으로
+const start=fromHash();
+go(start.name,start,'replace').then(ok=>{if(!ok&&S.user)go(HOME(S.user),{},'replace');});
